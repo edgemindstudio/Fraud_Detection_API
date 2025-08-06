@@ -12,11 +12,12 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Define BASE_DIR before using it
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Load the trained model safely
 # model_path = os.path.join(os.path.dirname(__file__), "..", "outputs", "RandomForest.pkl")
-
-# New (this works in Render)
-model_path = os.path.join(BASE_DIR, "model", "RandomForest.pkl")
+model_path = os.path.join(BASE_DIR, "model", "RandomForest.pkl") # New (this works in Render)
 
 if not os.path.exists(model_path):
     raise FileNotFoundError(f"Model file not found at: {model_path}")
