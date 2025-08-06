@@ -1,0 +1,29 @@
+# Ignore large raw or intermediate files
+data/creditcard.csv
+outputs/preprocessed/*.npz
+
+# Ignore virtual environment
+.venv/
+
+# Ignore PyCharm settings
+.idea/
+
+# Ignore data files and preprocessed binaries
+data/
+outputs/preprocessed/
+outputs/*.pkl
+
+# Ignore Jupyter/IPython notebooks cache
+.ipynb_checkpoints/
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
