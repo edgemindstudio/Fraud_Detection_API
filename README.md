@@ -1,29 +1,35 @@
 # 🛡️ Fraud Detection API
 
-A complete machine learning pipeline for detecting fraudulent credit card transactions — trained, evaluated, and deployed with a FastAPI backend.
-
+A complete end-to-end machine learning pipeline for detecting fraudulent credit card transactions — trained, evaluated, and deployed using a **FastAPI** backend and live **Dockerized API** hosted on **Render**.
 ## 🚀 Project Overview
 
 This project:
-- Trains a fraud detection model using credit card transaction data
-- Handles heavy class imbalance using SMOTE
+- Trains a fraud detection model on real-world credit card transaction data
+- Handles heavy class imbalance using **SMOTE**
 - Evaluates multiple models (Random Forest, Logistic Regression)
-- Deploys a trained model as a REST API using FastAPI
-- Returns live fraud prediction via `/predict` endpoint
+- Exports the best model (RandomForest.pkl)
+- Deploys a **FastAPI**-powered REST API using Docker + Render
+- Accepts 30 scaled features and returns live fraud predictions via the /predict endpoint
 
+---
+## 🌐 Live Demo
+👉 fraud-detection-api-27ae.onrender.com/docs
+Try the /predict endpoint directly from the Swagger UI.
+---
 ## 📁 Folder Structure
 
 ```kotlin
 FraudDetection/
-├── app/
+├── app/                # FastAPI backend
 │   └── main.py
+│   └── model           # Deployed model storage
 ├── data/
 │   └── creditcard.csv
-├── notebooks/
+├── notebooks/          # EDA, preprocessing, training
 │   ├── 01_data_exploration.py
 │   ├── 02_preprocessing.py
 │   └── 03_model_training.py
-├── outputs/
+├── outputs/            # Model evaluation outputs
 │   ├── RandomForest.pkl
 │   ├── LogisticRegression.pkl
 │   ├── preprocessed/
@@ -34,19 +40,9 @@ FraudDetection/
 │       ├── roc_comparison.png
 │       ├── LogisticRegression_confusion_matrix.png
 │       └── RandomForest_confusion_matrix.png
-├── requirements.txt
-├── locked_requirements.txt
-└── README.md 
-```
-
-```kotlin
-FraudDetection/
-├── app/# FastAPI backend
-├── data/# Original dataset (creditcard.csv)
-├── notebooks/# EDA, preprocessing, model training
-├── outputs/# Saved models, plots, test/train data
-├── requirements.txt # Project dependencies
-└── README.md # Project documentation
+├── requirements.txt     # Core dependencies
+├── Dockerfile           # Containerized deployment
+└── README.md            # Documentation
 ```
 
 ## ⚙️ How to Use
@@ -54,8 +50,8 @@ FraudDetection/
 ### 1. Clone the repository
 
 ```bash
-  git clone https://github.com/YOUR_USERNAME/FraudDetection.git
-  cd FraudDetection
+   git clone https://github.com/YOUR_USERNAME/FraudDetection.git
+   cd Fraud_Detection_API
 ```
 ### 2. Create and activate virtual environment
 
@@ -71,7 +67,17 @@ FraudDetection/
   uvicorn app.main:app --reload
 ```
 
-Then visit 👉 http://127.0.0.1:8000/docs to test the API.
+Then visit 👉 http://127.0.0.1:8000/docs in your browser to test the API.
+
+---
+## 📡 Render Deployment (Dockerized)
+The API is deployed live using Render + Docker. No local host or server is required to be running after deployment.
+
+---
+## 🟢 Public Endpoint:
+https://fraud-detection-api-27ae.onrender.com/predict
+
+---
 
 ## 🔍 Example API Request
 
@@ -113,11 +119,12 @@ Then visit 👉 http://127.0.0.1:8000/docs to test the API.
 ----------------
 
 ## 🛠️ Tech Stack
-- Python, NumPy, pandas
-- scikit-learn, imbalanced-learn
-- FastAPI, Uvicorn
-- Matplotlib, Seaborn
-- SMOTE (for class balancing)
+- **Backend**: FastAPI, Uvicorn
+- **ML Libraries**: scikit-learn, imbalanced-learn
+- **Data**: pandas, NumPy
+- **Deployment**: Docker, Render
+- **Visualization**: Matplotlib, Seaborn
+- **SMOTE** (for class balancing)
 ----------------
 
 ## 📘 Author
@@ -126,10 +133,17 @@ Then visit 👉 http://127.0.0.1:8000/docs to test the API.
 - [Github](https://github.com/edgemindstudio) | [LinkedIn](https://www.linkedin.com/in/edgemindstudio/)
 
 ---
+## 📄 Version Info
 
-### 📄 1.3. Confirm `requirements.txt`
+- API Version: 1.0.0
+- OpenAPI Spec: 3.1
+- Python Version: 3.10
+- Docker-based Deployment
+
+---
+
+### 📄 Dependency Locking
 
 If not already updated, run:
 ```bash
     pip freeze > requirements.txt
-```
