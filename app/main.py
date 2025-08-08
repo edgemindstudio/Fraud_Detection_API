@@ -1,8 +1,9 @@
 # app/main.py
 
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, Field
+from typing import List
 import joblib
 import numpy as np
 import os
@@ -10,15 +11,24 @@ import os
 app = FastAPI(
     title="Fraud Detection API",
     description="A REST API to predict fraudulent transactions using a trained Random Forest model.",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # ================================
-# Enable CORS (currently allow all, restrict later)
+# CORS – restrict to your frontend (and localhost for dev)
 # ================================
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:8501",  # fallback for local Streamlit
+)
+ALLOWED_ORIGINS = [
+    FRONTEND_URL,
+    "http://localhost:8501",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Later replace with ["https://YOUR-UI.onrender.com"]
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,37 +38,51 @@ app.add_middleware(
 # Load the trained model
 # ================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(BASE_DIR, "model", "RandomForest.pkl")  # works in Render
-# model_path = os.path.join(os.path.dirname(__file__), "..", "outputs", "RandomForest.pkl")
+model_path = os.path.join(BASE_DIR, "model", "RandomForest.pkl")
 
 if not os.path.exists(model_path):
     raise FileNotFoundError(f"Model file not found at: {model_path}")
 
-model = joblib.load(model_path)
+try:
+    model = joblib.load(model_path)
+except Exception as e:
+    raise RuntimeError(f"Failed to load model: {e}") from e
 
 # ================================
-# Define the input schema
+# Schemas
 # ================================
 class Transaction(BaseModel):
-    features: list  # Must be a list of 30 floats (scaled input features)
+    # Enforce exactly 30 floats
+    features: List[float] = Field(..., min_length=30, max_length=30, description="30 scaled feature values")
+
+class PredictionResponse(BaseModel):
+    prediction: int
+    fraud_probability: float
+    is_fraud: str
 
 # ================================
 # Endpoints
 # ================================
-@app.post("/predict")
+@app.post("/predict", response_model=PredictionResponse)
 def predict(transaction: Transaction):
-    if len(transaction.features) != 30:
-        return {"error": "Input must be a list of 30 scaled features."}
+    try:
+        data = np.array(transaction.features, dtype=float).reshape(1, -1)
+    except Exception:
+        raise HTTPException(status_code=422, detail="Features must be numeric.")
 
-    data = np.array(transaction.features).reshape(1, -1)
-    prediction = model.predict(data)[0]
-    probability = model.predict_proba(data)[0][1]
+    pred = int(model.predict(data)[0])
+    prob = float(model.predict_proba(data)[0][1])
 
     return {
-        "prediction": int(prediction),
-        "fraud_probability": round(float(probability), 4),
-        "is_fraud": "Yes" if prediction == 1 else "No"
+        "prediction": pred,
+        "fraud_probability": round(prob, 4),
+        "is_fraud": "Yes" if pred == 1 else "No",
     }
+
+@app.get("/healthz")
+def healthz():
+    # Simple readiness check for Render health checks
+    return {"status": "ok", "model_loaded": True}
 
 @app.get("/")
 def read_root():
