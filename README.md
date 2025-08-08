@@ -13,8 +13,10 @@ This project:
 
 ---
 ## 🌐 Live Demo
-👉 fraud-detection-api-27ae.onrender.com/docs
-Try the /predict endpoint directly from the Swagger UI.
+Try the /predict endpoint directly
+- **Frontend (Streamlit)**: fraud-detection-api-frontend.onrender.com
+- **Backend API (FastAPI)**: fraud-detection-api-27ae.onrender.com
+- **Swagger Docs**: fraud-detection-api-27ae.onrender.com/docs
 ---
 ## 📁 Folder Structure
 
@@ -23,6 +25,8 @@ FraudDetection/
 ├── app/                # FastAPI backend
 │   └── main.py
 │   └── model           # Deployed model storage
+├── frontend/           # Streamlit UI
+│   └── streamlit_app.py
 ├── data/
 │   └── creditcard.csv
 ├── notebooks/          # EDA, preprocessing, training
@@ -41,7 +45,8 @@ FraudDetection/
 │       ├── LogisticRegression_confusion_matrix.png
 │       └── RandomForest_confusion_matrix.png
 ├── requirements.txt     # Core dependencies
-├── Dockerfile           # Containerized deployment
+├── Dockerfile           # Backend Dockerfile Containerized deployment
+├── Dockerfile.streamlit # Frontend Dockerfile
 └── README.md            # Documentation
 ```
 
@@ -79,9 +84,13 @@ https://fraud-detection-api-27ae.onrender.com/predict
 
 ---
 
-## 🔍 Example API Request
+## Backend API Request
+- **Framework**: FastAPI
+- **Purpose**: Accepts transaction features (30 scaled numerical inputs) and returns prediction + fraud probability.
+- **Key Endpoint**:
 
 ### POST /predict
+#### Request Body
 
 ```json
 {
@@ -93,7 +102,7 @@ https://fraud-detection-api-27ae.onrender.com/predict
 }
 ```
 
-### Response
+#### Response
 
 ```json
 {
@@ -102,6 +111,13 @@ https://fraud-detection-api-27ae.onrender.com/predict
   "is_fraud": "No"
 }
 ```
+## Frontend UI
+- **Framework**: Streamlit
+- **Purpose**: User-friendly interface to input transaction data and view predictions visually.
+- **Features**:
+  - 30 feature sliders
+  - Predict button
+  - Real-time fraud probability display
 
 ## Models Used
 
