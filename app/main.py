@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 import joblib
 import numpy as np
 import os
@@ -12,28 +13,40 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Define BASE_DIR before using it
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# ================================
+# Enable CORS (currently allow all, restrict later)
+# ================================
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Later replace with ["https://YOUR-UI.onrender.com"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Load the trained model safely
+# ================================
+# Load the trained model
+# ================================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "model", "RandomForest.pkl")  # works in Render
 # model_path = os.path.join(os.path.dirname(__file__), "..", "outputs", "RandomForest.pkl")
-model_path = os.path.join(BASE_DIR, "model", "RandomForest.pkl") # New (this works in Render)
 
 if not os.path.exists(model_path):
     raise FileNotFoundError(f"Model file not found at: {model_path}")
 
 model = joblib.load(model_path)
 
-
-# Define the input schema using Pydantic
+# ================================
+# Define the input schema
+# ================================
 class Transaction(BaseModel):
     features: list  # Must be a list of 30 floats (scaled input features)
 
-
-# Define the prediction endpoint
+# ================================
+# Endpoints
+# ================================
 @app.post("/predict")
 def predict(transaction: Transaction):
-    # Validate input shape
     if len(transaction.features) != 30:
         return {"error": "Input must be a list of 30 scaled features."}
 

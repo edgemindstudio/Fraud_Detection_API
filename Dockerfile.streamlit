@@ -1,0 +1,15 @@
+FROM python:3.10-slim
+WORKDIR /app
+
+# deps only for the UI
+COPY requirements_frontend.txt .
+RUN pip install --no-cache-dir -r requirements_frontend.txt
+
+# copy only the UI folder
+COPY frontend ./frontend
+
+# Streamlit runs on the port Render assigns
+ENV PORT=10000
+EXPOSE 10000
+
+CMD bash -lc "streamlit run frontend/streamlit_app.py --server.port $PORT --server.address 0.0.0.0"
