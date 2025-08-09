@@ -1,4 +1,11 @@
 # 🛡️ Fraud Detection API
+![Python](https://img.shields.io/badge/Python-3.10-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100.0-green)
+![Docker](https://img.shields.io/badge/Docker-ready-blue)
+![Render](https://img.shields.io/badge/Deployed%20on-Render-purple)
+
+> Credit card fraud causes billions in losses annually.
+> This project demonstrates how machine learning can detect fraudulent transactions in real-time.
 
 A complete end-to-end machine learning pipeline for detecting fraudulent credit card transactions — trained, evaluated, and deployed using a **FastAPI** backend and live **Dockerized API** hosted on **Render**.
 ## 🚀 Project Overview
@@ -14,9 +21,10 @@ This project:
 ---
 ## 🌐 Live Demo
 Try the /predict endpoint directly
-- **Frontend (Streamlit)**: fraud-detection-api-frontend.onrender.com
-- **Backend API (FastAPI)**: fraud-detection-api-27ae.onrender.com
-- **Swagger Docs**: fraud-detection-api-27ae.onrender.com/docs
+- **Frontend (Streamlit)**: [fraud-detection-api-frontend.onrender.com](https://fraud-detection-api-frontend.onrender.com)
+- **Backend API (FastAPI)**: [fraud-detection-api-27ae.onrender.com](https://fraud-detection-api-27ae.onrender.com)
+- **Swagger Docs**: [fraud-detection-api-27ae.onrender.com/docs](https://fraud-detection-api-27ae.onrender.com/docs)
+
 ---
 ## 📁 Folder Structure
 
@@ -79,6 +87,11 @@ Then visit 👉 http://127.0.0.1:8000/docs in your browser to test the API.
 The API is deployed live using Render + Docker. No local host or server is required to be running after deployment.
 
 ---
+### Run with Docker
+```bash
+  docker build -t fraud-api .
+  docker run -p 8000:8000 fraud-api
+```
 ## 🟢 Public Endpoint:
 https://fraud-detection-api-27ae.onrender.com/predict
 
@@ -163,3 +176,6 @@ https://fraud-detection-api-27ae.onrender.com/predict
 If not already updated, run:
 ```bash
     pip freeze > requirements.txt
+```
+## 📜 License
+This project is licensed under the MIT License.
