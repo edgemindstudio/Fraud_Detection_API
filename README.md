@@ -26,6 +26,20 @@ Try the /predict endpoint directly
 - **Swagger Docs**: [fraud-detection-api-27ae.onrender.com/docs](https://fraud-detection-api-27ae.onrender.com/docs)
 
 ---
+## 📚 Detailed Documentation
+
+For complete setup guides, model training details, API references, and testing instructions, see the [`/docs`](./docs) folder.
+
+The `/docs` folder includes:
+- **[setup_local.md](./docs/setup_local.md)** — Run the project locally
+- **[setup_docker.md](./docs/setup_docker.md)** — Build & run with Docker
+- **[setup_cloud.md](./docs/setup_cloud.md)** — Deploy to Render or cloud services
+- **[model_training.md](./docs/model_training.md)** — ML model training process
+- **[api_reference.md](./docs/api_reference.md)** — API endpoints & examples
+- **[test_cases.md](./docs/test_cases.md)** — How to run and verify tests
+- **architecture.png** — Visual diagram of the pipeline
+---
+
 ## 📁 Folder Structure
 
 ```kotlin
